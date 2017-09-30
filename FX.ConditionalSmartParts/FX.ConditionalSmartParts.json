@@ -1,0 +1,25 @@
+﻿{
+  "Active": true,
+  "ConfigEntities": [
+    {
+      "Entity": "Account",
+      "EntityProperty": "Address.City",
+      "ConfigValues": [
+        {
+          "Value": "Phoenix",
+          "SmartParts": [
+            "SmartPart1",
+            "SmartPart1"
+          ]
+        },
+        {
+          "Value": "Tucson",
+          "SmartParts": [
+            "SmartPart3",
+            "SmartPart4"
+          ]
+        }
+      ]
+    }
+  ]
+}
