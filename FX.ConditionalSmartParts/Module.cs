@@ -38,6 +38,7 @@ namespace FX.ConditionalSmartParts
         {
             try
             {
+                EntityContext = PageWorkItem.Services.Get<IEntityContextService>();
                 if (!EntityContext.HasEntityContext) return;
 
                 if (Configuration == null || !Configuration.Active || Configuration.ConfigEntities.Count == 0) return;
@@ -98,9 +99,7 @@ namespace FX.ConditionalSmartParts
         private ModuleConfig _config = null;
         private ModuleConfig Configuration => _config ?? (_config = File.Exists(EntityConfigFile) ? File.ReadAllText(EntityConfigFile).FromJson<ModuleConfig>() : null);
 
-        private string EntityConfigFile => Path.Combine(EntitySmartPartFolder, _CONFIGFILE);
-
-        private string EntitySmartPartFolder => Path.Combine(HttpRuntime.AppDomainAppPath, @"SmartParts\" + EntityName);
+        private string EntityConfigFile => Path.Combine(HttpRuntime.AppDomainAppPath, _CONFIGFILE);
 
         private string EntityName => EntityContext.EntityType.ToString().Split('.').ToList().Last().Substring(1);
     }
