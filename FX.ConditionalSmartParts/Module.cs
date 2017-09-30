@@ -20,25 +20,24 @@ namespace FX.ConditionalSmartParts
         private const string _CONFIGFILE = "FX.ConditionalSmartParts.json";
 
         [ServiceDependency]
-        private IEntityContextService EntityContext { get; set; }
+        public IEntityContextService EntityContext { get; set; }
 
         [ServiceDependency(Type = typeof(WorkItem))]
-        private UIWorkItem PageWorkItem { get; set; }
+        public UIWorkItem PageWorkItem { get; set; }
 
         private MainContentWorkspace _mainworkspace = null;
-        private MainContentWorkspace MainContentWorkspace => _mainworkspace ?? this.PageWorkItem.Workspaces["MainContent"] as MainContentWorkspace;
+        private MainContentWorkspace MainContentWorkspace => _mainworkspace ?? (_mainworkspace = PageWorkItem.Workspaces["MainContent"] as MainContentWorkspace);
 
         private TabWorkspace _tabworkspace = null;
-        private TabWorkspace TabWorkspace => _tabworkspace ?? this.PageWorkItem.Workspaces["TabControl"] as TabWorkspace;
+        private TabWorkspace TabWorkspace => _tabworkspace ?? (_tabworkspace = PageWorkItem.Workspaces["TabControl"] as TabWorkspace);
 
         private TaskPaneWorkspace _taskworkspace = null;
-        private TaskPaneWorkspace TaskPaneWorkspace => _taskworkspace ?? this.PageWorkItem.Workspaces["TaskPane"] as TaskPaneWorkspace;
+        private TaskPaneWorkspace TaskPaneWorkspace => _taskworkspace ?? (_taskworkspace = PageWorkItem.Workspaces["TaskPane"] as TaskPaneWorkspace);
 
         public void Load()
         {
             try
             {
-                EntityContext = PageWorkItem.Services.Get<IEntityContextService>();
                 if (!EntityContext.HasEntityContext) return;
 
                 if (Configuration == null || !Configuration.Active || Configuration.ConfigEntities.Count == 0) return;
