@@ -51,29 +51,26 @@ namespace FX.ConditionalSmartParts
                     var isValueMatch = valueConfig.Value.ToString().Equals(entityValue.ToString(), StringComparison.CurrentCultureIgnoreCase);
                     foreach (var smartPart in valueConfig.SmartParts)
                     {
-                        foreach (var part in MainContentWorkspace.SmartParts.Cast<Control>().Where(part => part.ID == smartPart))
-                        {
-                            if (isValueMatch)
-                                MainContentWorkspace.Show(part);
-                            else
-                                MainContentWorkspace.Hide(smartPart);
-                        }
-
-                        foreach (var part in TaskPaneWorkspace.SmartParts.Cast<Control>().Where(part => part.ID == smartPart))
-                        {
-                            if (isValueMatch)
-                                TaskPaneWorkspace.Show(part);
-                            else
-                                TaskPaneWorkspace.Hide(smartPart);
-                        }
-
-                        TabWorkspace.Hide(smartPart, !isValueMatch);
+                        SetSmartPartVisibility(MainContentWorkspace, smartPart, isValueMatch);
+                        SetSmartPartVisibility(TabWorkspace, smartPart, isValueMatch);
+                        SetSmartPartVisibility(TaskPaneWorkspace, smartPart, isValueMatch);
                     }
                 }
             }
             catch (Exception ex)
             {
                 log.Error(ex.Message, ex);
+            }
+        }
+
+        private void SetSmartPartVisibility(IWorkspace workspace, string smartPartId, bool show)
+        {
+            foreach (var smartPart in workspace.SmartParts.Cast<UserControl>().Where(smartPart => smartPart.ID == smartPartId))
+            {
+                if (show)
+                    workspace.Show(smartPart);
+                else
+                    workspace.Hide(smartPart);
             }
         }
 
