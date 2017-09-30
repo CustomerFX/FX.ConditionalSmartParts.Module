@@ -38,6 +38,8 @@ namespace FX.ConditionalSmartParts
         {
             try
             {
+                if (!EntityContext.HasEntityContext) return;
+
                 if (Configuration == null || !Configuration.Active || Configuration.ConfigEntities.Count == 0) return;
 
                 var entityConfig = Configuration.ConfigEntities.FirstOrDefault(x => x.Entity.Equals(EntityName, StringComparison.CurrentCultureIgnoreCase));
