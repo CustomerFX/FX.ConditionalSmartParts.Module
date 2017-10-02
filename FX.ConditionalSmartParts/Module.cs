@@ -3,13 +3,13 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
-using FX.ConditionalSmartParts.Configuration;
 using Sage.Platform.Application;
 using Sage.Platform.Application.UI;
 using Sage.Platform.Orm.Interfaces;
-using FX.ConditionalSmartParts.Utility;
 using Sage.Platform.WebPortal.Workspaces;
 using Sage.Platform.WebPortal.Workspaces.Tab;
+using FX.ConditionalSmartParts.Utility;
+using FX.ConditionalSmartParts.Configuration;
 
 namespace FX.ConditionalSmartParts
 {
@@ -50,12 +50,12 @@ namespace FX.ConditionalSmartParts
 
                 foreach (var valueConfig in entityConfig.ConfigValues)
                 {
-                    var isValueMatch = valueConfig.Value.ToString().Equals(entityValue.ToString(), StringComparison.CurrentCultureIgnoreCase);
+                    var valueMatch = valueConfig.Value.ToString().Equals(entityValue.ToString(), StringComparison.CurrentCultureIgnoreCase);
                     foreach (var smartPart in valueConfig.SmartParts)
                     {
-                        SetSmartPartVisibility(MainContentWorkspace, smartPart, isValueMatch);
-                        SetSmartPartVisibility(TabWorkspace, smartPart, isValueMatch);
-                        SetSmartPartVisibility(TaskPaneWorkspace, smartPart, isValueMatch);
+                        SetSmartPartVisibility(MainContentWorkspace, smartPart, valueMatch);
+                        SetSmartPartVisibility(TabWorkspace, smartPart, valueMatch);
+                        SetSmartPartVisibility(TaskPaneWorkspace, smartPart, valueMatch);
                     }
                 }
             }
@@ -67,12 +67,19 @@ namespace FX.ConditionalSmartParts
 
         private void SetSmartPartVisibility(IWorkspace workspace, string smartPartId, bool show)
         {
-            foreach (var smartPart in workspace.SmartParts.Cast<UserControl>().Where(smartPart => smartPart.ID == smartPartId))
+            if (workspace is TabWorkspace)
             {
-                if (show)
-                    workspace.Show(smartPart);
-                else
-                    workspace.Hide(smartPart);
+                ((TabWorkspace)workspace).Hide(smartPartId, !show);
+            }
+            else
+            {
+                foreach (var smartPart in workspace.SmartParts.Cast<UserControl>().Where(smartPart => smartPart.ID == smartPartId))
+                {
+                    if (show)
+                        workspace.Show(smartPart);
+                    else
+                        workspace.Hide(smartPart);
+                }
             }
         }
 

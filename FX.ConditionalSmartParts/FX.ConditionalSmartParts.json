@@ -1,5 +1,5 @@
 ﻿{
-  "Active": true,
+  "Active": false,
   "ConfigEntities": [
     {
       "Entity": "Account",
