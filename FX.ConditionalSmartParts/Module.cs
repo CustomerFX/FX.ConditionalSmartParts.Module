@@ -41,21 +41,21 @@ namespace FX.ConditionalSmartParts
                 if (!EntityContext.HasEntityContext) return;
 
                 if (Configuration == null || !Configuration.Active || Configuration.ConfigEntities.Count == 0) return;
-
-                var entityConfig = Configuration.ConfigEntities.FirstOrDefault(x => x.Entity.Equals(EntityName, StringComparison.CurrentCultureIgnoreCase));
-                if (entityConfig == null) return;
-
-                var entityValue = GetEntityValue(entityConfig.EntityProperty);
-                if (entityValue == null) return;
-
-                foreach (var valueConfig in entityConfig.ConfigValues)
+                
+                foreach (var entityConfig in Configuration.ConfigEntities.Where(x => x.Entity.Equals(EntityName, StringComparison.CurrentCultureIgnoreCase)))
                 {
-                    var valueMatch = valueConfig.Value.ToString().Equals(entityValue.ToString(), StringComparison.CurrentCultureIgnoreCase);
-                    foreach (var smartPart in valueConfig.SmartParts)
+                    var entityValue = GetEntityValue(entityConfig.EntityProperty);
+                    if (entityValue == null) return;
+
+                    foreach (var valueConfig in entityConfig.ConfigValues)
                     {
-                        SetSmartPartVisibility(MainContentWorkspace, smartPart, valueMatch);
-                        SetSmartPartVisibility(TabWorkspace, smartPart, valueMatch);
-                        SetSmartPartVisibility(TaskPaneWorkspace, smartPart, valueMatch);
+                        var valueMatch = valueConfig.Value.ToString().Equals(entityValue.ToString(), StringComparison.CurrentCultureIgnoreCase);
+                        foreach (var smartPart in valueConfig.SmartParts)
+                        {
+                            SetSmartPartVisibility(MainContentWorkspace, smartPart, valueMatch);
+                            SetSmartPartVisibility(TabWorkspace, smartPart, valueMatch);
+                            SetSmartPartVisibility(TaskPaneWorkspace, smartPart, valueMatch);
+                        }
                     }
                 }
             }
