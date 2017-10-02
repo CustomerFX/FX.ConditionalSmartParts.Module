@@ -10,7 +10,7 @@ To use this module, simply perform the following steps:
 2. Open the SlxClient portal in Application Arhitect and select the SupportFiles tab
 3. Locate the FX.ConditionalSmartParts.json file and double-click to open it
 4. Add an entry for the entity, the property to check, and the SmartParts that should show for each value
-5. Build & deploy
+5. Deploy
 
 The way this works is if a SmartPart is *not* listed for a value in the config file, the SmartPart will show for all records. If a SmartPart is listed for a value in the config file, it will only show for records with that value. You can use this for several different entities or even for moltiple different fields for the same entity.
 
