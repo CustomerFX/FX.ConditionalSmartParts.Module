@@ -72,7 +72,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>COPY "$(TargetPath)" "$(SolutionDir)Deliverables\$(TargetFileName)" 
-COPY "$(ProjectDir)\FX.ConditionalSmartParts.json" "$(SolutionDir)Deliverables\"</PostBuildEvent>
+COPY "$(ProjectDir)\FX.ConditionalSmartParts.json" "$(SolutionDir)Deliverables\FX.ConditionalSmartParts.json"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
