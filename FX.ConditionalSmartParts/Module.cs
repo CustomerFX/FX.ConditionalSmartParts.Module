@@ -44,17 +44,21 @@ namespace FX.ConditionalSmartParts
                 
                 foreach (var entityConfig in Configuration.ConfigEntities.Where(x => x.Entity.Equals(EntityName, StringComparison.CurrentCultureIgnoreCase)))
                 {
+                    // set all configured SmartParts as hidden, each will be shown for the appropriate value
+                    foreach (var sp in entityConfig.ConfigValues.SelectMany(cfg => cfg.SmartParts))
+                        SetSmartPartVisibility(sp, false);
+
+                    // get current entity value
                     var entityValue = GetEntityValue(entityConfig.EntityProperty);
                     if (entityValue == null) return;
 
+                    // locate configurations with match and show SmartParts
                     foreach (var valueConfig in entityConfig.ConfigValues)
                     {
                         var valueMatch = valueConfig.Value.ToString().Equals(entityValue.ToString(), StringComparison.CurrentCultureIgnoreCase);
                         foreach (var smartPart in valueConfig.SmartParts)
                         {
-                            SetSmartPartVisibility(MainContentWorkspace, smartPart, valueMatch);
-                            SetSmartPartVisibility(TabWorkspace, smartPart, valueMatch);
-                            SetSmartPartVisibility(TaskPaneWorkspace, smartPart, valueMatch);
+                            if (valueMatch) SetSmartPartVisibility(smartPart, true);
                         }
                     }
                 }
@@ -65,8 +69,17 @@ namespace FX.ConditionalSmartParts
             }
         }
 
-        private void SetSmartPartVisibility(IWorkspace workspace, string smartPartId, bool show)
+        private void SetSmartPartVisibility(string smartPartId, bool show, IWorkspace workspace = null)
         {
+            if (workspace == null)
+            {
+                // if no specific workspace indicated assume all 
+                SetSmartPartVisibility(smartPartId, show, MainContentWorkspace);
+                SetSmartPartVisibility(smartPartId, show, TabWorkspace);
+                SetSmartPartVisibility(smartPartId, show, TaskPaneWorkspace);
+                return;
+            }
+
             if (workspace is TabWorkspace)
             {
                 ((TabWorkspace)workspace).Hide(smartPartId, !show);
